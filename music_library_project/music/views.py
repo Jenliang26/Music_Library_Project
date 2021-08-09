@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
 
+
 # Create your views here.
 class SongList(APIView):
 
@@ -48,3 +49,12 @@ class SongDetail(APIView):
         song.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+class LikedSongs(APIView):
+
+    def get(self, request, pk):
+        song = self.get(pk)
+        song.likes += 1
+        song.save()
+        serializer=SongSerializer(song)
+        return Response(serializer.data)
